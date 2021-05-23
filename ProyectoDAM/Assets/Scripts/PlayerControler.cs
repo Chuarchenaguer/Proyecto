@@ -13,7 +13,8 @@ public class PlayerControler : MonoBehaviour
         target = transform.position;
         //gameObject.GetComponent<Transform>().position = new Vector3(20, 0, 0);
         //gameObject.transform.position = new Vector3(gameObject.transform.position.x + 20, gameObject.transform.position.y, gameObject.transform.position.z);
-        //puntero = transform.position;
+        //puntero = transform.position; 
+        
     }
 
     void Update()
