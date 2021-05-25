@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ObjetosEscenario : MonoBehaviour//, IPointerEnterHandler, IPointerExitHandler
+public class ObjetosEscenario : MonoBehaviour
 {
     public PointerControl pointerControl;
+    Transform playerT;
 
-    /*
-    public void OnPointerEnter(PointerEventData pointerEventData)
+    void Start()
     {
-        pointerControl.changeCursor("pick");
-        Debug.Log("dentro");
-    }
-    public void OnPointerExit(PointerEventData PointerEventData)
-    {
-        pointerControl.changeCursor("normal");
-        Debug.Log("fuera");
-    }
-}*/
+        //playerT = FindObjectOfType<PlayerControler>().transform.position;
+        gameObject.GetComponent<Animator>().SetBool("open", false);
 
+    }
+
+    private void Update()
+    {
+        //playerT = new Vector3(playerT.position.x, transform.position.y, transform.position.z);
+        //Debug.Log(playerT.position.x+"-----"+ gameObject.transform.position.x);
+    }
+    
     public void OnMouseEnter()
     {
         pointerControl.changeCursor("pick");
@@ -30,6 +31,13 @@ public class ObjetosEscenario : MonoBehaviour//, IPointerEnterHandler, IPointerE
         pointerControl.changeCursor("normal");
         Debug.Log("fuera");
     }
+    //public void OnMouseDown()
+    //{
+        //if (playerT.position == transform.position)
+        //{
+            //gameObject.GetComponent<Animator>().SetBool("open", true);
+        //}
+    //}
 }
 
 /*

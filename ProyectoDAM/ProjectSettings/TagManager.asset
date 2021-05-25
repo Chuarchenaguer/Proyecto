@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Player1
   - Camera1
+  - Taquilla
   layers:
   - Default
   - TransparentFX

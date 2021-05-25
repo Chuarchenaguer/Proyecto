@@ -7,14 +7,15 @@ public class PlayerControler : MonoBehaviour
     public int speed;
     Vector3 target;
     Vector3 posToGo;
+    GameObject taquilla;
 
     void Start()
     {
         target = transform.position;
-        //gameObject.GetComponent<Transform>().position = new Vector3(20, 0, 0);
-        //gameObject.transform.position = new Vector3(gameObject.transform.position.x + 20, gameObject.transform.position.y, gameObject.transform.position.z);
-        //puntero = transform.position; 
-        
+                //gameObject.GetComponent<Transform>().position = new Vector3(20, 0, 0);
+                //gameObject.transform.position = new Vector3(gameObject.transform.position.x + 20, gameObject.transform.position.y, gameObject.transform.position.z);
+                //puntero = transform.position; 
+                taquilla = FindObjectOfType<ObjetosEscenario>().gameObject;
     }
 
     void Update()
@@ -27,18 +28,26 @@ public class PlayerControler : MonoBehaviour
         posToGo = new Vector3(target.x, transform.position.y, transform.position.z);
         transform.position = Vector3.MoveTowards(transform.position, posToGo, speed * Time.deltaTime);
 
+        if (posToGo.x <= 47 && posToGo.x >= 26 && transform.position.x <= 47 && transform.position.x >= 26)
+        {
+            gameObject.GetComponent<Animator>().SetBool("open", true);
+            taquilla.gameObject.GetComponent<Animator>().SetBool("open", true);
+        }
         if (posToGo.x < gameObject.transform.position.x) //movimiento hacía la izquierda
         {
+            gameObject.GetComponent<Animator>().SetBool("open", false);
             gameObject.GetComponent<Animator>().SetBool("moving", true);
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        
         }
         else if (target.x > gameObject.transform.position.x) //movimiento hacía la derecha
         {
+            gameObject.GetComponent<Animator>().SetBool("open", false);
             gameObject.GetComponent<Animator>().SetBool("moving", true);
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
 
-            if (transform.position == posToGo)
+        if (transform.position == posToGo)
         {
             gameObject.GetComponent<Animator>().SetBool("moving", false);
         }
