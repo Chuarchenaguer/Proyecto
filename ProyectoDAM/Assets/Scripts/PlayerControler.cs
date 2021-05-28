@@ -9,7 +9,6 @@ public class PlayerControler : MonoBehaviour
     Vector3 target;
     Vector3 posToGo;
     GameObject taquilla;
-    GameObject door1;
     bool control = false;
     public TMP_Text text;
     public string myText;
@@ -24,18 +23,17 @@ public class PlayerControler : MonoBehaviour
     {
         //controlObjetos = GameObject.Find("Scripts").GetComponent(typeof(ControlObjetos)) as ControlObjetos;
         audioSource = GetComponent<AudioSource>();
+        llave = GameObject.FindGameObjectWithTag("llave");
+        llave.SetActive(false);
+        taquilla = FindObjectOfType<ObjetosEscenario>().gameObject;
     }
     void Start()
     {
         target = transform.position;
-        taquilla = FindObjectOfType<ObjetosEscenario>().gameObject;
         myText = "";
-        llave = GameObject.FindGameObjectWithTag("llave");
-        llave.SetActive(false);
     }
     void Update()
     {
-        Debug.Log(posToGo);
         text.text = myText;
 
         if (Input.GetMouseButtonUp(0))
@@ -45,7 +43,6 @@ public class PlayerControler : MonoBehaviour
 
         posToGo = new Vector3(target.x, transform.position.y, transform.position.z);
         transform.position = Vector3.MoveTowards(transform.position, posToGo, speed * Time.deltaTime);
-
 
         if (posToGo.x < gameObject.transform.position.x) //movimiento hacía la izquierda
         {
@@ -58,7 +55,6 @@ public class PlayerControler : MonoBehaviour
             gameObject.GetComponent<Animator>().SetBool("moving", true);
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
-
         if (transform.position == posToGo)  //Idle
         {
             gameObject.GetComponent<Animator>().SetBool("moving", false);
@@ -92,7 +88,7 @@ public class PlayerControler : MonoBehaviour
 
 IEnumerator Esperar() //Corrutina para feedback textos
     {
-        yield return new WaitForSeconds(3);
+        yield return new WaitForSeconds(5);
         myText = "";
     }
 }
