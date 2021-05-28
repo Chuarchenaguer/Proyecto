@@ -9,7 +9,6 @@ public class PointerControl : MonoBehaviour
     Texture2D activeCursor;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         Cursor.visible = false;

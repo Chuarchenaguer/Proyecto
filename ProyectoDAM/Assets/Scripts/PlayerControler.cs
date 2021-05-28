@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerControler : MonoBehaviour
     {
@@ -8,18 +9,35 @@ public class PlayerControler : MonoBehaviour
     Vector3 target;
     Vector3 posToGo;
     GameObject taquilla;
+    GameObject door1;
+    bool control = false;
+    public TMP_Text text;
+    public string myText;
+    ControlObjetos controlObjetos;
+    Camera cam;
+    public AudioClip openTaquilla;
+    public AudioClip closeTaquilla;
+    public AudioSource audioSource;
+    GameObject llave;
 
+    private void Awake()
+    {
+        //controlObjetos = GameObject.Find("Scripts").GetComponent(typeof(ControlObjetos)) as ControlObjetos;
+        audioSource = GetComponent<AudioSource>();
+    }
     void Start()
     {
         target = transform.position;
-                //gameObject.GetComponent<Transform>().position = new Vector3(20, 0, 0);
-                //gameObject.transform.position = new Vector3(gameObject.transform.position.x + 20, gameObject.transform.position.y, gameObject.transform.position.z);
-                //puntero = transform.position; 
-                taquilla = FindObjectOfType<ObjetosEscenario>().gameObject;
+        taquilla = FindObjectOfType<ObjetosEscenario>().gameObject;
+        myText = "";
+        llave = GameObject.FindGameObjectWithTag("llave");
+        llave.SetActive(false);
     }
-
     void Update()
     {
+        Debug.Log(posToGo);
+        text.text = myText;
+
         if (Input.GetMouseButtonUp(0))
         {
             target = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -28,90 +46,53 @@ public class PlayerControler : MonoBehaviour
         posToGo = new Vector3(target.x, transform.position.y, transform.position.z);
         transform.position = Vector3.MoveTowards(transform.position, posToGo, speed * Time.deltaTime);
 
-        if (posToGo.x <= 47 && posToGo.x >= 26 && transform.position.x <= 47 && transform.position.x >= 26)
-        {
-            gameObject.GetComponent<Animator>().SetBool("open", true);
-            taquilla.gameObject.GetComponent<Animator>().SetBool("open", true);
-        }
+
         if (posToGo.x < gameObject.transform.position.x) //movimiento hacía la izquierda
         {
-            gameObject.GetComponent<Animator>().SetBool("open", false);
             gameObject.GetComponent<Animator>().SetBool("moving", true);
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
         
         }
         else if (target.x > gameObject.transform.position.x) //movimiento hacía la derecha
         {
-            gameObject.GetComponent<Animator>().SetBool("open", false);
             gameObject.GetComponent<Animator>().SetBool("moving", true);
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
 
-        if (transform.position == posToGo)
+        if (transform.position == posToGo)  //Idle
         {
             gameObject.GetComponent<Animator>().SetBool("moving", false);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (posToGo.x <= 39.5 && posToGo.x >=19.5 && control == false) //TAQUILLA COLISIÓN
+        {
+            audioSource.PlayOneShot(openTaquilla);
+            gameObject.GetComponent<Animator>().SetBool("open", true);
+            taquilla.gameObject.GetComponent<Animator>().SetInteger("open", 1);
+            myText = "Has encontrado una llave";
+            llave. SetActive(true);
+            StartCoroutine("Esperar");
+            control = true;
+        }
+    }
+    
+    private void OnTriggerExit2D(Collider2D collision)   //TAQUILLA COLISIÓN   
+    {
+        if (control == true)
+        {
+            control = false;
+            gameObject.GetComponent<Animator>().SetBool("open", false);
+            audioSource.PlayOneShot(closeTaquilla);
+            taquilla.gameObject.GetComponent<Animator>().SetInteger("open", 2);
+        }
+    }
+
+IEnumerator Esperar() //Corrutina para feedback textos
+    {
+        yield return new WaitForSeconds(3);
+        myText = "";
+    }
 }
-/*if (this.gameObject.transform.position.x == target.x)
-{
-    this.gameObject.transform.position = new Vector3(target.x, 0, 0);
-}*/
-
-//gameObject.transform.position = new Vector3(gameObject.transform.position.x + 50f * Time.deltaTime, gameObject.transform.position.y, gameObject.transform.position.z);
-//gameObject.transform.Translate(50f*Time.deltaTime, 0, 0);
-
-/* //OLD
-if (Input.GetMouseButtonUp(0))
-{
-    target = Camera.main.ScreenToWorldPoint(new Vector3(
-    Input.mousePosition.x,
-    0f,
-    0f
-    ));
-}
-
-if (target.x < gameObject.transform.position.x) //movimiento hacía la izquierda
-{
-    gameObject.transform.Translate(-speed * Time.deltaTime, 0, 0);
-    gameObject.GetComponent<Animator>().SetBool("moving", true);
-    gameObject.GetComponent<SpriteRenderer>().flipX = false;
-}
-else if (target.x > gameObject.transform.position.x) //movimiento hacía la derecha
-{
-    gameObject.transform.Translate(speed * Time.deltaTime, 0, 0);
-    gameObject.GetComponent<Animator>().SetBool("moving", true);
-    gameObject.GetComponent<SpriteRenderer>().flipX = true;
-}
-
-
-if ((gameObject.transform.position.x == target.x)) //parado
-{
-    gameObject.transform.Translate(0, 0, 0);
-    gameObject.transform.position = new Vector3(target.x, 0, 0);
-    gameObject.GetComponent<Animator>().SetBool("moving", false);
-}
-}  
-} */
-
-
-
-
-
-/*Debug.Log("hgola");
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Debug.DrawRay(ray.origin, ray.direction * 1000, Color.green);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                Debug.Log("hola2");
-                if (hit.collider.gameObject.name == "target")
-                {
-                    Debug.Log("posicion antes" + gameObject.transform.position);
-                    gameObject.transform.position = target.transform.position;
-                    Debug.Log("posicion despues" + gameObject.transform.position);
-                }
-            }*/
-
-
-//gameObject.transform.position = Vector3.MoveTowards(transform.position, target, speed*Time.deltaTime);

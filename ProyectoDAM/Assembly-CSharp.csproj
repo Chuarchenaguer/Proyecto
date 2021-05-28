@@ -63,7 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\CameraControler.cs" />
-    <Compile Include="Assets\Scripts\Cortinas.cs" />
+    <Compile Include="Assets\Scripts\ControlObjetos.cs" />
     <Compile Include="Assets\Scripts\ObjetosEscenario.cs" />
     <Compile Include="Assets\Scripts\Pilares.cs" />
     <Compile Include="Assets\Scripts\PlayerControler.cs" />
